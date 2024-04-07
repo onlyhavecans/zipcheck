@@ -1,0 +1,5 @@
+Passed Directories: [testdata]
+Found 3 zip files in: testdata
+Invalid zip file: testdata/incomplete.zip
+.
+Invalid zip file: testdata/bad_01.zip

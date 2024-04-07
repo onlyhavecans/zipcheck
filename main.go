@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"sync"
@@ -9,53 +10,33 @@ import (
 	"github.com/onlyhavecans/zipcheck/internal/ziptools"
 )
 
-func getDirectoriesFromArgs() []string {
-	args := os.Args[1:]
-	return args
-}
+const (
+	maxGoroutines = 10
+	exitFail      = 1
+	fileExtension = ".zip"
+)
 
-func getAllZipFilesIn(directory string) ([]string, error) {
-	// walk through all directories and files
-	// put all zip files in a slice and return the slice
-	var allZipFiles []string
-	err := filepath.Walk(directory, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-
-		if filepath.Ext(path) == ".zip" {
-			allZipFiles = append(allZipFiles, path)
-		}
-		return nil
-	})
-	return allZipFiles, err
-}
-
-func checkFile(file string) {
-	if ziptools.IsValidZip(file) {
-		fmt.Print(".")
-	} else {
-		fmt.Println("Invalid zip file:", file)
+func main() {
+	if err := run(os.Args, os.Stdin, os.Stdout); err != nil {
+		_, _ = fmt.Fprintf(os.Stderr, "%v\n", err)
+		os.Exit(exitFail)
 	}
 }
 
-func main() {
-	const maxGoroutines = 10
-
+func run(args []string, _ io.Reader, stdout io.Writer) error {
 	// get all directories passed as arguments and put them in a slice
-	directories := getDirectoriesFromArgs()
-	fmt.Println("Passed Directories:", directories)
+	directories := getDirectoriesFromArgs(args)
+	log(stdout, "Passed Directories:", directories)
 
 	// walk through all directories and check all zip files
 	for _, directory := range directories {
-		fmt.Println("Checking Directory:", directory)
-		allFiles, err := getAllZipFilesIn(directory)
+		allFiles, err := getFilesRecursive(directory, fileExtension)
 		if err != nil {
-			fmt.Println(err)
+			log(stdout, err)
 			continue
 		}
 
-		fmt.Println("Found", len(allFiles), "zip files in:", directory)
+		log(stdout, "Found", len(allFiles), "zip files in:", directory)
 
 		// create a semaphore to limit the number of goroutines
 		semaphore := make(chan struct{}, maxGoroutines)
@@ -65,10 +46,42 @@ func main() {
 			semaphore <- struct{}{}
 			go func(file string) {
 				defer wg.Done()
-				checkFile(file)
+				if ziptools.IsValidZip(file) {
+					log(stdout, ".")
+				} else {
+					log(stdout, "Invalid zip file:", file)
+				}
 				<-semaphore
 			}(file)
 		}
 		wg.Wait()
 	}
+	return nil
+}
+
+func log(to io.Writer, v ...interface{}) {
+	fmt.Fprintln(to, v...)
+}
+
+func getDirectoriesFromArgs(args []string) []string {
+	return args[1:]
+}
+
+func getFilesRecursive(directory string, extension string) ([]string, error) {
+	if _, err := os.Stat(directory); os.IsNotExist(err) {
+		return nil, fmt.Errorf("directory %s does not exist", directory)
+	}
+
+	var allZipFiles []string
+	err := filepath.Walk(directory, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if filepath.Ext(path) == extension {
+			allZipFiles = append(allZipFiles, path)
+		}
+		return nil
+	})
+	return allZipFiles, err
 }
