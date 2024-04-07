@@ -17,13 +17,13 @@ const (
 )
 
 func main() {
-	if err := run(os.Args, os.Stdin, os.Stdout); err != nil {
+	if err := run(os.Args, os.Stdout, os.Stderr); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "%v\n", err)
 		os.Exit(exitFail)
 	}
 }
 
-func run(args []string, _ io.Reader, stdout io.Writer) error {
+func run(args []string, stdout io.Writer, stderr io.Writer) error {
 	// get all directories passed as arguments and put them in a slice
 	directories := getDirectoriesFromArgs(args)
 	log(stdout, "Passed Directories:", directories)
@@ -32,7 +32,7 @@ func run(args []string, _ io.Reader, stdout io.Writer) error {
 	for _, directory := range directories {
 		allFiles, err := getFilesRecursive(directory, fileExtension)
 		if err != nil {
-			log(stdout, err)
+			log(stderr, err)
 			continue
 		}
 
@@ -49,7 +49,7 @@ func run(args []string, _ io.Reader, stdout io.Writer) error {
 				if ziptools.IsValidZip(file) {
 					log(stdout, ".")
 				} else {
-					log(stdout, "Invalid zip file:", file)
+					log(stderr, "Invalid zip file:", file)
 				}
 				<-semaphore
 			}(file)

@@ -1,16 +1,15 @@
-all: update lint fmt test
+all: lint fmt test
 
 update:
 	go get -u ./...
 	go mod tidy
 
 lint:
+	go vet ./...
 	golangci-lint run
 
 fmt:
-	go install mvdan.cc/gofumpt@latest
 	go fmt ./...
-	gofumpt -w .
 
 test:
 	go test -v ./...
