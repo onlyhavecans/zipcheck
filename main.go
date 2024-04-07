@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"
 	"sync"
 
+	"github.com/onlyhavecans/zipcheck/internal"
 	"github.com/onlyhavecans/zipcheck/internal/ziptools"
 )
 
@@ -30,7 +30,7 @@ func run(args []string, stdout io.Writer, stderr io.Writer) error {
 
 	// walk through all directories and check all zip files
 	for _, directory := range directories {
-		allFiles, err := getFilesRecursive(directory, fileExtension)
+		allFiles, err := internal.GetFilesRecursive(directory, fileExtension)
 		if err != nil {
 			log(stderr, err)
 			continue
@@ -65,23 +65,4 @@ func log(to io.Writer, v ...interface{}) {
 
 func getDirectoriesFromArgs(args []string) []string {
 	return args[1:]
-}
-
-func getFilesRecursive(directory string, extension string) ([]string, error) {
-	if _, err := os.Stat(directory); os.IsNotExist(err) {
-		return nil, fmt.Errorf("directory %s does not exist", directory)
-	}
-
-	var allZipFiles []string
-	err := filepath.Walk(directory, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-
-		if filepath.Ext(path) == extension {
-			allZipFiles = append(allZipFiles, path)
-		}
-		return nil
-	})
-	return allZipFiles, err
 }

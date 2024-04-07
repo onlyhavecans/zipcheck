@@ -8,9 +8,6 @@ import (
 )
 
 func IsValidZip(file string) bool {
-	// check if file is a valid zip file
-	// if it is, return true
-	// else return false
 	zipFile, err := zip.OpenReader(file)
 	if err != nil {
 		return false
@@ -27,18 +24,18 @@ func IsValidZip(file string) bool {
 }
 
 func verifyZipFileDeep(file *zip.File) error {
-	rc, err := file.Open()
+	zipFile, err := file.Open()
 	if err != nil {
 		return fmt.Errorf("error opening file %s in zip: %w", file.Name, err)
 	}
-	defer rc.Close()
+	defer zipFile.Close()
 
-	h := crc32.NewIEEE()
-	if _, err := io.Copy(h, rc); err != nil {
+	hash := crc32.NewIEEE()
+	if _, err := io.Copy(hash, zipFile); err != nil {
 		return fmt.Errorf("error calculating CRC32 checksum for file %s: %w", file.Name, err)
 	}
 
-	if h.Sum32() != file.CRC32 {
+	if hash.Sum32() != file.CRC32 {
 		return fmt.Errorf("CRC32 checksum doesn't match for file %s", file.Name)
 	}
 
