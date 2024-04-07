@@ -1,5 +1,8 @@
 # ZipCheck
 
+![tests workflow](https://github.com/onlyhavecans/zipcheck/actions/workflows/go-test.yml/badge.svg)
+![lint workflow](https://github.com/onlyhavecans/zipcheck/actions/workflows/golangci-lint.yml/badge.svg)
+
 ## Overview
 
 This is a simple command line application for deep testing your zip files.
