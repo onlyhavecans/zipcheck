@@ -13,6 +13,8 @@ While you could do something like this with `zip -T` and some bash I wanted to h
 
 Download the version for you platform from [releases](https://github.com/onlyhavecans/zipcheck/releases)
 
+Run this by passing in all the directories you want to check
+
 ```shell
-zipcheck <directory> <directory> ...
+./zipcheck <directory> <directory> ...
 ```
