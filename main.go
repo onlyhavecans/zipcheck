@@ -6,8 +6,8 @@ import (
 	"os"
 	"sync"
 
-	"github.com/onlyhavecans/zipcheck/internal"
-	"github.com/onlyhavecans/zipcheck/internal/ziptools"
+	"onlyhavecans.works/onlyhavecans/zipcheck/internal"
+	"onlyhavecans.works/onlyhavecans/zipcheck/internal/ziptools"
 )
 
 const (

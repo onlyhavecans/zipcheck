@@ -1,3 +1,3 @@
-module github.com/onlyhavecans/zipcheck
+module onlyhavecans.works/onlyhavecans/zipcheck
 
 go 1.22.2

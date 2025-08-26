@@ -3,7 +3,7 @@ package ziptools_test
 import (
 	"testing"
 
-	"github.com/onlyhavecans/zipcheck/internal/ziptools"
+	"onlyhavecans.works/onlyhavecans/zipcheck/internal/ziptools"
 )
 
 func TestIsValidZip(t *testing.T) {
