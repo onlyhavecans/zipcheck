@@ -28,8 +28,20 @@ func TestRun(t *testing.T) {
 		wantErr    bool
 	}{
 		{"no args no stdin", args{[]string{"zipcheck", ""}}, "emptyStdout", "emptyStderr", false},
-		{"fake directory", args{[]string{"zipcheck", "aaaaaaa"}}, "fakeStdout", "fakeStderr", false},
-		{"good directory", args{[]string{"zipcheck", "testdata"}}, "goodStdout", "goodStderr", false},
+		{
+			"fake directory",
+			args{[]string{"zipcheck", "aaaaaaa"}},
+			"fakeStdout",
+			"fakeStderr",
+			false,
+		},
+		{
+			"good directory",
+			args{[]string{"zipcheck", "testdata"}},
+			"goodStdout",
+			"goodStderr",
+			false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -59,8 +59,8 @@ func run(args []string, stdout io.Writer, stderr io.Writer) error {
 	return nil
 }
 
-func log(to io.Writer, v ...interface{}) {
-	fmt.Fprintln(to, v...)
+func log(to io.Writer, v ...any) {
+	_, _ = fmt.Fprintln(to, v...)
 }
 
 func getDirectoriesFromArgs(args []string) []string {

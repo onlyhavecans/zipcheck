@@ -12,7 +12,7 @@ func IsValidZip(file string) bool {
 	if err != nil {
 		return false
 	}
-	defer zipFile.Close()
+	defer func() { _ = zipFile.Close() }()
 
 	for _, file := range zipFile.File {
 		if err := verifyZipFileDeep(file); err != nil {
@@ -28,7 +28,7 @@ func verifyZipFileDeep(file *zip.File) error {
 	if err != nil {
 		return fmt.Errorf("error opening file %s in zip: %w", file.Name, err)
 	}
-	defer zipFile.Close()
+	defer func() { _ = zipFile.Close() }()
 
 	hash := crc32.NewIEEE()
 	if _, err := io.Copy(hash, zipFile); err != nil {
