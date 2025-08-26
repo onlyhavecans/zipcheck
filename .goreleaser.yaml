@@ -46,6 +46,10 @@ changelog:
       - "^docs:"
       - "^test:"
 
+gitea_urls:
+  api: https:/onlyhavecans.works//api/v1
+  download: https://onlyhavecans.works
+
 release:
   footer: >-
 
