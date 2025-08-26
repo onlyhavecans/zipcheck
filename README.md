@@ -1,7 +1,6 @@
 # ZipCheck
 
-![tests workflow](https://github.com/onlyhavecans/zipcheck/actions/workflows/go-test.yml/badge.svg)
-![lint workflow](https://github.com/onlyhavecans/zipcheck/actions/workflows/golangci-lint.yml/badge.svg)
+![tests workflow](https://onlyhavecans.works/onlyhavecans/zipcheck/badges/workflows/ci.yml/badge.svg)
 
 ## Overview
 
