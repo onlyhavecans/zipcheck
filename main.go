@@ -12,18 +12,14 @@ import (
 
 const (
 	maxGoroutines = 10
-	exitFail      = 1
 	fileExtension = ".zip"
 )
 
 func main() {
-	if err := run(os.Args, os.Stdout, os.Stderr); err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "%v\n", err)
-		os.Exit(exitFail)
-	}
+	run(os.Args, os.Stdout, os.Stderr)
 }
 
-func run(args []string, stdout io.Writer, stderr io.Writer) error {
+func run(args []string, stdout io.Writer, stderr io.Writer) {
 	// get all directories passed as arguments and put them in a slice
 	directories := getDirectoriesFromArgs(args)
 	log(stdout, "Passed Directories:", directories)
@@ -56,7 +52,6 @@ func run(args []string, stdout io.Writer, stderr io.Writer) error {
 		}
 		wg.Wait()
 	}
-	return nil
 }
 
 func log(to io.Writer, v ...any) {
