@@ -21,7 +21,8 @@ jobs:
           version: v2.12.2 # renovate: datasource=github-releases depName=golangci/golangci-lint
 
   test:
-    runs-on: debian-latest
+    # ubuntu-latest: lfs checkout jobs fail at scheduling on debian-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
