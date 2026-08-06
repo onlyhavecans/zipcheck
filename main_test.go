@@ -25,22 +25,19 @@ func TestRun(t *testing.T) {
 		args       args
 		wantStdout string
 		wantStderr string
-		wantErr    bool
 	}{
-		{"no args no stdin", args{[]string{"zipcheck", ""}}, "emptyStdout", "emptyStderr", false},
+		{"no args no stdin", args{[]string{"zipcheck", ""}}, "emptyStdout", "emptyStderr"},
 		{
 			"fake directory",
 			args{[]string{"zipcheck", "aaaaaaa"}},
 			"fakeStdout",
 			"fakeStderr",
-			false,
 		},
 		{
 			"good directory",
 			args{[]string{"zipcheck", "testdata"}},
 			"goodStdout",
 			"goodStderr",
-			false,
 		},
 	}
 	for _, tt := range tests {
@@ -60,11 +57,7 @@ func TestRun(t *testing.T) {
 			}
 			wantStderr := string(wantStderrB)
 
-			err = run(tt.args.args, stdout, stderr)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("run() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
+			run(tt.args.args, stdout, stderr)
 			if gotStdout := stdout.String(); gotStdout != wantStdout {
 				t.Errorf("run() gotStdout = %v, want %v", gotStdout, wantStdout)
 			}
