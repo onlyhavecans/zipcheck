@@ -16,6 +16,7 @@ const (
 )
 
 func main() {
+	maybePrintVersion()
 	run(os.Args, os.Stdout, os.Stderr)
 }
 
