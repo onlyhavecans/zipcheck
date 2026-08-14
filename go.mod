@@ -2,4 +2,4 @@ module onlyhavecans.works/onlyhavecans/zipcheck
 
 go 1.26
 
-toolchain go1.26.5
+toolchain go1.26.6
